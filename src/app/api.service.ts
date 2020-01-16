@@ -1,20 +1,14 @@
 import { Injectable } from '@angular/core';
 import { Observable, of, throwError } from 'rxjs';
 import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
-import { catchError, tap, map } from 'rxjs/operators';
-import { Product } from './product';
 
-
-const httpOptions = {
-  headers: new HttpHeaders({'Content-Type': 'application/json'})
-};
 @Injectable({
   providedIn: 'root'
 })
 
 export class ApiService {
 
-  private apiUrl = 'http://localhost:8080/api';
+  private apiUrl = 'http://localhost:8080/connect/api/v1/products';
 
   constructor(private http: HttpClient) { }
 
@@ -23,10 +17,12 @@ export class ApiService {
     return this.http.get(`${this.apiUrl}/${id}`);
   }
 
+  // tslint:disable-next-line: ban-types
   createProduct(product: Object): Observable<Object> {
     return this.http.post(`${this.apiUrl}`, product);
   }
 
+  // tslint:disable-next-line: ban-types
   updateProduct(id: number, value: any): Observable<Object> {
     return this.http.put(`${this.apiUrl}/${id}`, value);
   }

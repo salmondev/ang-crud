@@ -10,6 +10,7 @@ import { ProductDetailComponent } from '../product-detail/product-detail.compone
   templateUrl: './products.component.html',
   styleUrls: ['./products.component.scss']
 })
+
 export class ProductsComponent implements OnInit {
   products: Observable<Product[]>;
 

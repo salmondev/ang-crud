@@ -1,16 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { ApiService } from '../api.service';
-import { FormControl, FormGroupDirective, FormBuilder, FormGroup, NgForm, Validators } from '@angular/forms';
-import { ErrorStateMatcher } from '@angular/material/core';
-import { Product } from '../product';
 
-export class MyErrorStateMatcher implements ErrorStateMatcher {
-  isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
-    const isSubmitted = form && form.submitted;
-    return !!(control && control.invalid && (control.dirty || control.touched || isSubmitted));
-  }
-}
+import { ApiService } from '../api.service';
+import { Product } from '../product';
 
 @Component({
   selector: 'app-product-add',
@@ -20,13 +12,10 @@ export class MyErrorStateMatcher implements ErrorStateMatcher {
 
 export class ProductAddComponent implements OnInit {
 
-  productForm: FormGroup;
-  matcher = new MyErrorStateMatcher();
-
   product: Product = new Product();
   submitted = false;
 
-  constructor(private router: Router, private apiService: ApiService, private formBuilder: FormBuilder) { }
+  constructor(private router: Router, private apiService: ApiService) { }
 
   ngOnInit() {
 
@@ -50,7 +39,7 @@ export class ProductAddComponent implements OnInit {
   }
 
   gotoList() {
-    this.router.navigate(['/product']);
+    this.router.navigate(['/products']);
   }
 
 }
