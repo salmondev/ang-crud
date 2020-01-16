@@ -4,17 +4,42 @@ import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http
 import { catchError, tap, map } from 'rxjs/operators';
 import { Product } from './product';
 
+
 const httpOptions = {
   headers: new HttpHeaders({'Content-Type': 'application/json'})
 };
-const apiUrl = 'http://localhost:3000/api/v1/products';
 @Injectable({
   providedIn: 'root'
 })
+
 export class ApiService {
+
+  private apiUrl = 'http://localhost:8080/api';
 
   constructor(private http: HttpClient) { }
 
+
+  getProduct(id: number): Observable<any> {
+    return this.http.get(`${this.apiUrl}/${id}`);
+  }
+
+  createProduct(product: Object): Observable<Object> {
+    return this.http.post(`${this.apiUrl}`, product);
+  }
+
+  updateProduct(id: number, value: any): Observable<Object> {
+    return this.http.put(`${this.apiUrl}/${id}`, value);
+  }
+
+  deleteProduct(id: number): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/${id}`, { responseType: 'text' });
+  }
+
+  getProductsList(): Observable<any> {
+    return this.http.get(`${this.apiUrl}`);
+  }
+
+/*
   getProducts(): Observable<Product[]> {
     return this.http.get<Product[]>(apiUrl)
       .pipe(
@@ -63,5 +88,6 @@ export class ApiService {
       // Let the app keep running by returning an empty result.
       return of(result as T);
     };
-  }
+  }*/
+
 }

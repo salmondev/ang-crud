@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { ApiService } from '../api.service';
 import { FormControl, FormGroupDirective, FormBuilder, FormGroup, NgForm, Validators } from '@angular/forms';
 import { ErrorStateMatcher } from '@angular/material/core';
+import { Product } from '../product';
 
 export class MyErrorStateMatcher implements ErrorStateMatcher {
   isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
@@ -16,36 +17,40 @@ export class MyErrorStateMatcher implements ErrorStateMatcher {
   templateUrl: './product-add.component.html',
   styleUrls: ['./product-add.component.scss']
 })
+
 export class ProductAddComponent implements OnInit {
 
   productForm: FormGroup;
-  prod_name = '';
-  prod_desc = '';
-  prod_price: number = null;
-  isLoadingResults = false;
   matcher = new MyErrorStateMatcher();
 
-  constructor(private router: Router, private api: ApiService, private formBuilder: FormBuilder) { }
+  product: Product = new Product();
+  submitted = false;
+
+  constructor(private router: Router, private apiService: ApiService, private formBuilder: FormBuilder) { }
 
   ngOnInit() {
-    this.productForm = this.formBuilder.group({
-      'prod_name' : [null, Validators.required],
-      'prod_desc' : [null, Validators.required],
-      'prod_price' : [null, Validators.required]
-    });
+
   }
 
-  onFormSubmit() {
-    this.isLoadingResults = true;
-    this.api.addProduct(this.productForm.value)
-      .subscribe((res: any) => {
-          const id = res._id;
-          this.isLoadingResults = false;
-          this.router.navigate(['/product-details', id]);
-        }, (err: any) => {
-          console.log(err);
-          this.isLoadingResults = false;
-        });
+  newProduct(): void {
+    this.submitted = false;
+    this.product = new Product();
+  }
+
+  save() {
+    this.apiService.createProduct(this.product)
+      .subscribe(data => console.log(data), error => console.log(error));
+    this.product = new Product();
+    this.gotoList();
+  }
+
+  onSubmit() {
+    this.submitted = true;
+    this.save();
+  }
+
+  gotoList() {
+    this.router.navigate(['/product']);
   }
 
 }

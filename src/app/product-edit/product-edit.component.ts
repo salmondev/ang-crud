@@ -3,6 +3,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { ApiService } from '../api.service';
 import { FormControl, FormGroupDirective, FormBuilder, FormGroup, NgForm, Validators } from '@angular/forms';
 import { ErrorStateMatcher } from '@angular/material/core';
+import { Product } from 'app/product';
 
 export class MyErrorStateMatcher implements ErrorStateMatcher {
   isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
@@ -16,54 +17,42 @@ export class MyErrorStateMatcher implements ErrorStateMatcher {
   templateUrl: './product-edit.component.html',
   styleUrls: ['./product-edit.component.scss']
 })
+
 export class ProductEditComponent implements OnInit {
 
-  productForm: FormGroup;
-  _id = '';
-  prod_name = '';
-  prod_desc = '';
-  prod_price: number = null;
-  isLoadingResults = false;
-  matcher = new MyErrorStateMatcher();
 
-  constructor(private router: Router, private route: ActivatedRoute, private api: ApiService, private formBuilder: FormBuilder) { }
+  id: number;
+  product: Product;
+  price: number;
+
+  constructor(private route: ActivatedRoute, private router: Router,
+              private apiService: ApiService) { }
 
   ngOnInit() {
-    this.getProduct(this.route.snapshot.params['id']);
-    this.productForm = this.formBuilder.group({
-      'prod_name' : [null, Validators.required],
-      'prod_desc' : [null, Validators.required],
-      'prod_price' : [null, Validators.required]
-    });
+    this.product = new Product();
+
+    this.id = this.route.snapshot.params.id;
+
+    this.apiService.getProduct(this.id)
+      .subscribe(data => {
+        console.log(data);
+        this.product = data;
+      }, error => console.log(error));
   }
 
-  getProduct(id: any) {
-    this.api.getProduct(id).subscribe((data: any) => {
-      this._id = data._id;
-      this.productForm.setValue({
-        prod_name: data.prod_name,
-        prod_desc: data.prod_desc,
-        prod_price: data.prod_price
-      });
-    });
+  updateProduct() {
+    this.apiService.updateProduct(this.id, this.product)
+      .subscribe(data => console.log(data), error => console.log(error));
+    this.product = new Product();
+    this.gotoList();
   }
 
-  onFormSubmit() {
-    this.isLoadingResults = true;
-    this.api.updateProduct(this._id, this.productForm.value)
-      .subscribe((res: any) => {
-          const id = res._id;
-          this.isLoadingResults = false;
-          this.router.navigate(['/product-details', id]);
-        }, (err: any) => {
-          console.log(err);
-          this.isLoadingResults = false;
-        }
-      );
+  onSubmit() {
+    this.updateProduct();
   }
 
-  productDetails() {
-    this.router.navigate(['/product-details', this._id]);
+  gotoList() {
+    this.router.navigate(['/product']);
   }
 
 }

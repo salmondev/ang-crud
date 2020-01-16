@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ApiService } from '../api.service';
 import { Product } from '../product';
+import { Observable } from 'rxjs';
+import { Router } from '@angular/router';
+import { ProductDetailComponent } from '../product-detail/product-detail.component';
 
 @Component({
   selector: 'app-products',
@@ -8,23 +11,30 @@ import { Product } from '../product';
   styleUrls: ['./products.component.scss']
 })
 export class ProductsComponent implements OnInit {
+  products: Observable<Product[]>;
 
-  displayedColumns: string[] = ['prod_name', 'prod_price'];
-  data: Product[] = [];
-  isLoadingResults = true;
-
-  constructor(private api: ApiService) { }
+  constructor(private apiService: ApiService,
+              private router: Router) {}
 
   ngOnInit() {
-    this.api.getProducts()
-      .subscribe((res: any) => {
-        this.data = res;
-        console.log(this.data);
-        this.isLoadingResults = false;
-      }, err => {
-        console.log(err);
-        this.isLoadingResults = false;
-      });
+    this.reloadData();
   }
 
+  reloadData() {
+    this.products = this.apiService.getProductsList();
+  }
+
+  deleteProduct(id: number) {
+    this.apiService.deleteProduct(id)
+      .subscribe(
+        data => {
+          console.log(data);
+          this.reloadData();
+        },
+        error => console.log(error));
+  }
+
+  productDetail(id: number) {
+    this.router.navigate(['details', id]);
+  }
 }
