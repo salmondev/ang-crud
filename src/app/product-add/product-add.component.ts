@@ -4,6 +4,8 @@ import { Router } from '@angular/router';
 import { ApiService } from '../api.service';
 import { Product } from '../product';
 
+import Swal from 'sweetalert2';
+
 @Component({
   selector: 'app-product-add',
   templateUrl: './product-add.component.html',
@@ -27,6 +29,12 @@ export class ProductAddComponent implements OnInit {
   }
 
   save() {
+    Swal.fire({
+      icon: 'success',
+      title: 'Product has been saved',
+      showConfirmButton: false,
+      timer: 1500
+    });
     this.apiService.createProduct(this.product)
       .subscribe(data => console.log(data), error => console.log(error));
     this.product = new Product();

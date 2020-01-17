@@ -3,14 +3,10 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { ApiService } from '../api.service';
 import { FormControl, FormGroupDirective, FormBuilder, FormGroup, NgForm, Validators } from '@angular/forms';
 import { ErrorStateMatcher } from '@angular/material/core';
-import { Product } from 'app/product';
+import { Product } from '../product';
 
-export class MyErrorStateMatcher implements ErrorStateMatcher {
-  isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
-    const isSubmitted = form && form.submitted;
-    return !!(control && control.invalid && (control.dirty || control.touched || isSubmitted));
-  }
-}
+import Swal from 'sweetalert2';
+
 
 @Component({
   selector: 'app-product-edit',
@@ -24,6 +20,7 @@ export class ProductEditComponent implements OnInit {
   id: number;
   product: Product;
   price: number;
+  submitted = false;
 
   constructor(private route: ActivatedRoute, private router: Router,
               private apiService: ApiService) { }
@@ -48,6 +45,13 @@ export class ProductEditComponent implements OnInit {
   }
 
   onSubmit() {
+    Swal.fire({
+      icon: 'success',
+      title: 'Product has been updated.',
+      showConfirmButton: false,
+      timer: 1500
+    });
+    this.submitted = true;
     this.updateProduct();
   }
 
