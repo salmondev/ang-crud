@@ -10,10 +10,25 @@ import { Product } from '../product';
 })
 export class ProductDetailComponent implements OnInit {
 
-  constructor(private route: ActivatedRoute, private api: ApiService, private router: Router) { }
+  id: number;
+  product: Product;
+
+  constructor(private route: ActivatedRoute, private apiService: ApiService, private router: Router) { }
 
   ngOnInit() {
+    this.product = new Product();
+
+    this.id = this.route.snapshot.params.id;
+
+    this.apiService.getProduct(this.id)
+      .subscribe(data => {
+        console.log(data);
+        this.product = data;
+      }, error => console.log(error));
   }
 
+  list() {
+    this.router.navigate(['products']);
+  }
 
 }

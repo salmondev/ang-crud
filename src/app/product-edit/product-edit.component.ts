@@ -52,7 +52,7 @@ export class ProductEditComponent implements OnInit {
   }
 
   gotoList() {
-    this.router.navigate(['/product']);
+    this.router.navigate(['/products']);
   }
 
 }
