@@ -39,6 +39,7 @@ export class ProductAddComponent implements OnInit {
   }
 
   gotoList() {
+    this.apiService.getProductsList();
     this.router.navigate(['/products']);
   }
 
