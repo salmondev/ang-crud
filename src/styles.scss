@@ -5,6 +5,8 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
 @import '~bootstrap/dist/css/bootstrap.min.css';
 
+@import 'sweetalert2/src/sweetalert2.scss';
+
 .footer {
     position: absolute;
     bottom: 0;
