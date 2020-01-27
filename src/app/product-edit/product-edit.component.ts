@@ -17,7 +17,7 @@ import Swal from 'sweetalert2';
 export class ProductEditComponent implements OnInit {
 
 
-  id: number;
+  id: string;
   product: Product;
   price: number;
   submitted = false;

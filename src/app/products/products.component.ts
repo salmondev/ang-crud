@@ -5,6 +5,9 @@ import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
 import { ProductDetailComponent } from '../product-detail/product-detail.component';
 import Swal from 'sweetalert2';
+
+import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
+
 @Component({
   selector: 'app-products',
   templateUrl: './products.component.html',
@@ -14,18 +17,23 @@ import Swal from 'sweetalert2';
 export class ProductsComponent implements OnInit {
   products: Observable<Product[]>;
 
+
   constructor(private apiService: ApiService,
-              private router: Router) {}
+              private router: Router, private http: HttpClient) {}
 
   ngOnInit() {
     this.reloadData();
+    /*this.http.get('http://localhost:8080/products/').subscribe(data => {
+      // อ่านค่า result จาก JSON response ที่ส่งออกมา
+      this.products = data['products'];
+    });*/
   }
 
   reloadData() {
     this.products = this.apiService.getProductsList();
   }
 
-  deleteProduct(id: number) {
+  deleteProduct(id: string) {
     Swal.fire({
       title: 'Delete Confirmation',
       text: 'Comfirm to delete data?',
@@ -60,11 +68,11 @@ export class ProductsComponent implements OnInit {
         error => console.log(error));*/
   }
 
-  productDetail(id: number) {
+  productDetail(id: string) {
     this.router.navigate(['product-details', id]);
   }
 
-  updateProduct(id: number) {
+  updateProduct(id: string) {
     this.router.navigate(['product-edit', id]);
   }
 

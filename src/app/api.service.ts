@@ -8,12 +8,12 @@ import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http
 
 export class ApiService {
 
-  private apiUrl = 'http://localhost:8080/connect/api/v1/products';
+  private apiUrl = 'http://localhost:8080/products/';
 
   constructor(private http: HttpClient) { }
 
 
-  getProduct(id: number): Observable<any> {
+  getProduct(id: string): Observable<any> {
     return this.http.get(`${this.apiUrl}/${id}`);
   }
 
@@ -23,11 +23,11 @@ export class ApiService {
   }
 
   // tslint:disable-next-line: ban-types
-  updateProduct(id: number, value: any): Observable<Object> {
+  updateProduct(id: string, value: any): Observable<Object> {
     return this.http.put(`${this.apiUrl}/${id}`, value);
   }
 
-  deleteProduct(id: number): Observable<any> {
+  deleteProduct(id: string): Observable<any> {
     return this.http.delete(`${this.apiUrl}/${id}`, { responseType: 'text' });
   }
 
@@ -44,7 +44,7 @@ export class ApiService {
       );
   }
 
-  getProduct(id: number): Observable<Product> {
+  getProduct(id: string): Observable<Product> {
     const url = `${apiUrl}/${id}`;
     return this.http.get<Product>(url).pipe(
       tap(_ => console.log(`fetched product id=${id}`)),
