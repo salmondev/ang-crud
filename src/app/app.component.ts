@@ -6,5 +6,7 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent {
-  title = 'CRUD';
+  title = 'app';
+  head = 'CRUD stack = Angular + Spring Boot + mongoDB';
+  dev = 'panurut';
 }
